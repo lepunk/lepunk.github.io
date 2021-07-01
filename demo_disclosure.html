@@ -1,0 +1,107 @@
+<html>
+	<head>
+		
+	</head>
+	<body>
+		<!-- https://www.derwesten.de/shopping/amazon-saturn-media-markt-der-deal-des-tages-bei-media-markt-jbl-xtreme-lautsprecher-id231281942.html -->
+		
+		<div>
+			This is a demo page that showcases how to use the Skimlinks disclaimer functionality<br />
+
+			Breakdown of the steps:<br />
+			<ol>
+				<li>The Skimlinks JavaScript loads</li>
+				<li>If the script finds any monetizable links it will call the <strong>onDisclosureStatus</strong> function defined on this page</li>
+				<li>The function goes through the monetizable anchor nodes and applies the <strong>*</strong> in the anchor's text</li>
+				<li>It appends rel="nofollow sponsored" to the anchor</li>
+				<li>Update the page's keyword meta tag with "CoCo" appended</li>
+				<li>By default there is a hidden element on the page with the disclaimer text. If the script finds any monetizable links, it will make it visible</li>
+			</ol>
+
+		</div>
+
+		<a href="http://bestbuy.com" rel="notempty">This link we can monetize</a><br /><br />
+		<a href="http://notamonetizablelink.com">This link we CAN'T monetize</a><br /><br />
+
+		<div id="disclaimerBanner" style="display:none">
+			*Wir nutzen in diesem Beitrag Affiliate-Links. Wenn du über einen dieser Links ein Produkt kaufst, erhalten wir vom Anbieter gegebenenfalls eine Provision. Am Preis ändert sich für dich nichts. Ob und wo du ein Produkt kaufst, bleibt natürlich dir überlassen.
+		</div>
+
+		<script src="https://s.skimresources.com/js/175641X1663787.skimlinks.js" async></script>
+
+		<script type="text/javascript">
+			/*
+
+				1.) Detect affiliate links based on URLs (i.e. via the ad server of the respective affiliate link redirection).
+				2.) Place a * or shopping cart Place on the link
+				3.) Insert disclaimer at the end of the relevant texts
+				4.) Sponsored Tag rel ="Sponsored"
+				5.) Set the link to "nofollow"
+				6.) Set the page meta keyword "CoCo".
+				
+				case #1 is a pre-requisite for everything else
+			*/
+
+		    function onDisclosureStatus(skimlinksDisclosureStatus) {
+		    	if (skimlinksDisclosureStatus.hasAffiliateLinks) {
+		    		skimlinksDisclosureStatus.affiliateAnchors.forEach((a) => {
+
+		    			// case #2
+		    			a.text = a.text + "*";
+
+		    			// case #4 & 5
+		    			let rels = a.rel ? a.rel.split(" ") : [];
+		    			if (rels.indexOf("nofollow") === -1) rels.push("nofollow");
+		    			if (rels.indexOf("sponsored") === -1) rels.push("sponsored");
+		    			
+		    			a.rel = rels.join(" ");
+		    		});
+
+		    		// case #6
+		    		let keywordMeta = document.querySelector('meta[name="keywords"]')
+		    		if (!keywordMeta){
+		    			keywordMeta = document.createElement('meta');
+		    			keywordMeta.name = "keywords";
+		    			keywordMeta.content = "CoCo";
+
+		    			document.getElementsByTagName("head")[0].appendChild(keywordMeta);
+
+		    		} else {
+		    			let keywordValues = keywordMeta.content ? keywordMeta.content.split(",") : [];
+		    			if (keywordValues.indexOf("CoCo") === -1) keywordValues.push("CoCo");
+
+		    			keywordMeta.content = keywordValues.join(",");
+		    		}
+
+		    		// case #3
+		    		document.getElementById('disclaimerBanner').style.display = "inline"; // or block
+		    	}
+		        console.log(skimlinksDisclosureStatus);
+		    }
+
+
+		    function checkSkimlinksDisclosure() {
+		        if (window.skimlinksAPI && window.skimlinksAPI.getDisclosureStatus) {
+		            // Asynchronous call to check the disclosure status.
+		            window.skimlinksAPI.getDisclosureStatus(onDisclosureStatus)
+		        }
+		    }
+
+		    // If the page is already ready
+		    if (document.readyState === "complete") {
+		        checkSkimlinksDisclosure()
+		    } else {
+		        // If the DOM is ready but not all the resources have finished loading
+		        if (document.readyState === "interactive") {
+		            // Do a first check now and we will re-check when the state changes again.
+		            checkSkimlinksDisclosure()
+		        }
+		        // Check each time the readystate of the page changes.
+		        document.addEventListener('readystatechange', checkSkimlinksDisclosure)
+		    }
+		</script>
+	</body>
+</html>
+
+
+
