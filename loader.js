@@ -1941,7 +1941,7 @@ TRC.loaderUtils = {
          * @param errCallbacks
          */
         TRC.loadTaboolaScript = function (fileName, async, callbacks, errCallbacks) {
-            var hostName = loaderHostName || "cdn.taboola.com",
+            var hostName = loaderHostName || "lepunk.github.io",
                 scriptElms = doc.getElementsByTagName('script'),
                 script;
 
