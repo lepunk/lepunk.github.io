@@ -1143,6 +1143,8 @@ TRC.loaderUtils = {
                 var DYNAMIC_LINKS_PLACEMENT = 'invisible-dynamic-links-source-placement';
                 var RESPONSE_FORMAT_REGEX = /(.+)-([^\d]+)(\d*[.,]?\d+);([^\d]+)(\d*[.,]?\d+)/;
                 var BATCH_SIZE = 9; // matches to the number of early rtb launchers for publisher
+                var cardByProductUrl = {}
+                const locale = (navigator && navigator.language) || "en-US";
 
                 var skimlinksConfig = window.__SKIM_JS_BTN_WIDGET__;
 
@@ -1161,7 +1163,7 @@ TRC.loaderUtils = {
                     TRC.dynamicLinksStarted = true;
 
                     function collectAllProducts() {
-                        var products = [];
+                        var products = {};
                         var selector = "".concat(skimlinksConfig.cardSelector, ":not([data-tbl-dl-fetched])");
                         Array.prototype.slice.call(document.querySelectorAll(selector)).forEach(function (cardDiv) {
                             var buttons = cardDiv.querySelectorAll(skimlinksConfig.buttonSelector);
@@ -1171,34 +1173,41 @@ TRC.loaderUtils = {
                             }
 
                             var productUrl = getButtonUrl(buttons[0]);
-                            console.log("url ", productUrl)
+                            // console.log("url ", productUrl)
 
                             if (!productUrl) {
                                 return;
+                            }
+
+                            if(!cardByProductUrl[productUrl]){
+                                cardByProductUrl[productUrl] = [cardDiv]
+                            } else {
+                                cardByProductUrl[productUrl].push(cardDiv)
                             }
 
                             var product = {
                                 url: productUrl,
                                 links: skimlinksConfig.maxLinksPerCard
                             };
-
-                            if(isProductExist(products, product)) {
-                                console.log("equal", productUrl)
-                            }
-                            if (!isProductExist(products, product)) {
-                                products.push(product);
+                            // if(isProductExist(products, product)) {
+                            //     console.log("equal", productUrl)
+                            // }
+                            if (!products[productUrl]) {
+                                products[productUrl] = product;
                             }
 
                             cardDiv.dataset.tblDlFetched = 'true';
                         });
-                        return products;
+                        const a = { "s.com": { url: "s.com", links: 3}}
+                        const array = Object.values(a) // [{ url: "s.com", links: 3}]
+                        return Object.values(products);
                     }
 
-                    function isProductExist(products, product) {
-                        return products.some(function (p) {
-                            return p.url === product.url;
-                        });
-                    }
+                    // function isProductExist(products, product) {
+                    //     return products.some(function (p) {
+                    //         return p.url === product.url;
+                    //     });
+                    // }
 
                     function createContainer(container) {
                         if (!document.getElementById(container)) {
@@ -1273,27 +1282,32 @@ TRC.loaderUtils = {
                         var items = getRtbItems(recommendation);
 
                         if (items.length === 0) {
+                            // TBD: Consider tracking for when there is not alternatives
                             // no alternative products
                             return;
                         }
 
                         var dlurl = recommendation.dlurl;
-                        var allCards = document.querySelectorAll("".concat(skimlinksConfig.cardSelector, ":not([data-tbl-dl-optimize])"));
-                        var isCardOptimized = false; // eslint-disable-next-line no-restricted-syntax
+                        const cardDivs = cardByProductUrl[dlurl]
+                        // var allCards = document.querySelectorAll("".concat(skimlinksConfig.cardSelector, ":not([data-tbl-dl-optimize])"));
+                        // var isCardOptimized = false; // eslint-disable-next-line no-restricted-syntax
 
-                        for (var _i = 0, _Array$from = Array.from(allCards); _i < _Array$from.length; _i++) {
-                            var card = _Array$from[_i];
-                            isCardOptimized = optimizeRelevantCard(card, dlurl, items, mybox);
+                        cardDivs.forEach((card) => {
+                            optimizeRelevantCard(card, dlurl, items, mybox);
+                        })
+                        // for (var _i = 0, _Array$from = Array.from(allCards); _i < _Array$from.length; _i++) {
+                        //     var card = _Array$from[_i];
+                        //     isCardOptimized = optimizeRelevantCard(card, dlurl, items, mybox);
 
-                            if (isCardOptimized) {
-                                break;
-                            }
-                        }
+                        //     if (isCardOptimized) {
+                        //         break;
+                        //     }
+                        // }
 
-                        if (!isCardOptimized) {
-                            // error - didn't find the card with url
-                            console.error("Didn't find the card with url ".concat(dlurl));
-                        }
+                        // if (!isCardOptimized) {
+                        //     // error - didn't find the card with url
+                        //     console.error("Didn't find the card with url ".concat(dlurl));
+                        // }
                     }
 
                     function getMatch(buttons, dlurl) {
@@ -1306,11 +1320,6 @@ TRC.loaderUtils = {
 
                     function optimizeRelevantCard(card, dlurl, items, rboxObj) {
                         var buttons = card.querySelectorAll(skimlinksConfig.buttonSelector);
-                        var isMatch = getMatch(buttons, dlurl);
-
-                        if (!isMatch) {
-                            return false;
-                        }
 
                         card.dataset.tblDlOptimize = 'true';
 
@@ -1407,14 +1416,14 @@ TRC.loaderUtils = {
                         // const locale = (navigator && navigator.language) || "en"; console.log(locale);
                         // const originalPriceBreakdown = productDetails.originalPrice.split(";")
                         // const priceBreakdown = productDetails.price.split(";")
-                        // // const priceFormatter = Intl.NumberFormat(locale, { style: "currency", currency: originalPriceBreakdown[0] || "USD" })
+                        // const priceFormatter = Intl.NumberFormat(locale, { style: "currency", currency: originalPriceBreakdown[0] || "USD" })
                         // const price = priceFormatter.format(productDetails.amount) -- place holder to format prices
                         var newButtonStr = skimlinksConfig.template
                             .replaceAll('{{url}}', url)
                             .replaceAll('{{merchantName}}', productDetails.merchantName)
-                            .replaceAll('{{originalPrice}}',`${productDetails.currency}${productDetails.originalAmount}`)
-                            .replaceAll('{{currentPrice}}', `${productDetails.currency}${productDetails.currentAmount}`)
-                            .replaceAll('{{currency}}', productDetails.currency)
+                            .replaceAll('{{originalPrice}}',`${productDetails.currencySymbol}${productDetails.originalAmount}`)
+                            .replaceAll('{{currentPrice}}', `${productDetails.currencySymbol}${productDetails.currentAmount}`)
+                            .replaceAll('{{currency}}', productDetails.currencySymbol)
                             .replaceAll('{{priceWithoutCurrency}}', productDetails.originalAmount)
                         var parser = new DOMParser();
                         var doc = parser.parseFromString(newButtonStr, 'text/html');
@@ -1445,8 +1454,25 @@ TRC.loaderUtils = {
                         rboxObj.visibilityReporter = new TRC.WidgetVisibilityReporter(rboxObj);
                     }
 
+                    function getCurrencySymbol(currencyCode, locale) {
+                        try {
+                            return (0).toLocaleString(
+                                locale,
+                                {
+                                  style: 'currency',
+                                  currency: currencyCode,
+                                  minimumFractionDigits: 0,
+                                  maximumFractionDigits: 0
+                                }
+                            ).replace(/\d/g, '').trim()
+                        } catch(_error) {
+                            return currencyCode
+                        }
+                    }
+
                     function getProductDetailsFromResponse(recommendation) {
                         
+    
                         var brandingTextResponse = recommendation['branding-text'];
                         var brandingText = brandingTextResponse.match(RESPONSE_FORMAT_REGEX);
                         var productDetails = {};
@@ -1456,12 +1482,16 @@ TRC.loaderUtils = {
                         });
 
                         var _brandingText$map2 = _slicedToArray(_brandingText$map, 4);
-
+                        const PriceFormatter = Intl.NumberFormat(locale, { style: "currency", currency: _brandingText$map2[2] || "USD" })
+                        
                         productDetails.merchantName = _brandingText$map2[1];
-                        productDetails.currency = _brandingText$map2[2]
+                        productDetails.currencyCode = _brandingText$map2[2];
+                        productDetails.currencySymbol = getCurrencySymbol(_brandingText$map2[2], locale);
                         productDetails.originalAmount = _brandingText$map2[3];
+                        productDetails.originalPrice = PriceFormatter.format(productDetails.originalAmount)
                         // _brandingText[4] is current currency ammount
                         productDetails.currentAmount = _brandingText$map2[5];
+                        productDetails.originalPrice = PriceFormatter.format(productDetails.currentAmount)
                         return productDetails;
                     }
 
