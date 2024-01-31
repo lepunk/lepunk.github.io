@@ -791,13 +791,13 @@
     // left-click handler for affiliation is invoked (on `click` or `mouseup` events)
 
     var MOBILE_HREF_RESTORATION_DELAY = 200; // ms
-    var BEACON_API_URL = "https://r-staging.skimresources.com/api/";
+    var BEACON_API_URL = "https://r.skimresources.com/api/";
     var MERCHANT_URL_EXTRACTION_RULES = merchantUrlExtractionRules;
     var DOMAIN_KEY = "296X1634315"; // For e.g. "123X234"
 
     var PUBLISHER_ID = 296;
     var DOMAIN_ID = 1634315;
-    var TRACKING_API_URL = "https://t-staging.skimresources.com/api/v2";
+    var TRACKING_API_URL = "https://t.skimresources.com/api/v2";
     var TABOOLA_BO_PUBLISHER_ID = "skimlinks-purewow";
     var TABOOLA_BO_AB_PERCENTAGE = 100; // Taboola widget specific configuration
 
