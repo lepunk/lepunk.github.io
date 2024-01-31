@@ -809,7 +809,7 @@
       template: "<div class=\"product-card__affiliate__item grid\" style=\"border-top:0!important\"><div class=\"product-card__affiliate-price\" itemprop=\"priceRange\"><span class=\"product-card__affiliate-label\"></span><span class=\"product-card__affiliate-price__wrap e-price__wrapper\"><span class=\"product-card__affiliate-price__symbol e-price__currency\" itemprop=\"currenciesAccepted\">{{currency}}</span><span class=\"product-card__affiliate-price__price e-price__fee\">{{priceWithoutCurrency}}</span></span></div><div class=\"product-card__affiliate-provider\"><div class=\"product-card__affiliate-cta\"><a class=\"product-card__affiliate-cta__link call-to-action__link\" href=\"{{url}}\" rel=\"sponsored noopener noreferrer\" target=\"_blank\">Buy now</a></div><div class=\"product-card__affiliate-summary\"><div class=\"product-card__affiliate-summary__heading\">Price at</div><div class=\"product-card__affiliate-summary__name\">{{merchantName}}</div></div></div></div>"
     };
     var taboolaWidgetCustomStyles = ".product-card__affiliate-price { min-width: 200px !important; }";
-    var WAYPOINT_DOMAIN = "go-staging.skimresources.com"; // After mid-2018, go.skimresources.com should be prefered to go.redirectingat.com. However, since the internet
+    var WAYPOINT_DOMAIN = "go.skimresources.com"; // After mid-2018, go.skimresources.com should be prefered to go.redirectingat.com. However, since the internet
     // will contain links to go.redirectingat.com for eternity we still need to support them.
 
     var WAYPOINT_LEGACY_DOMAIN = "go.redirectingat.com"; // Sentry API
