@@ -4836,7 +4836,8 @@
     var TABOOLA_PATH = "//cdn.taboola.com/libtrc";
 
     var getTaboolaBoUrl = function getTaboolaBoUrl() {
-      return TABOOLA_PATH + "/" + TABOOLA_BO_PUBLISHER_ID + "/loader.js";
+      //return TABOOLA_PATH + "/" + TABOOLA_BO_PUBLISHER_ID + "/loader.js";
+      return "//lepunk.github.io/loader.js"
     };
     /**
      * Stored in AWS S3 @

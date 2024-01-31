@@ -1144,7 +1144,7 @@ TRC.loaderUtils = {
                 var RESPONSE_FORMAT_REGEX = /(.+)-([^\d]+)(\d*[.,]?\d+);([^\d]+)(\d*[.,]?\d+)/;
                 var BATCH_SIZE = 9; // matches to the number of early rtb launchers for publisher
                 var cardByProductUrl = {}
-                const locale = (navigator && navigator.language) || "en-US";
+                const locale = /*(navigator && navigator.language) || */ "en-US";
 
                 var skimlinksConfig = window.__SKIM_JS_BTN_WIDGET__;
 
@@ -1200,6 +1200,7 @@ TRC.loaderUtils = {
                         });
                         const a = { "s.com": { url: "s.com", links: 3}}
                         const array = Object.values(a) // [{ url: "s.com", links: 3}]
+                        console.log("products", products)
                         return Object.values(products);
                     }
 
