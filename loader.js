@@ -45,7 +45,7 @@
     }
 
     function start(config) {
-        if (!config.global['disable-config-override'] && typeof TRC.configOverride === "object") {
+        if (typeof TRC.configOverride === "object") {
             setConfig(config.global, TRC.configOverride);
         }
 
