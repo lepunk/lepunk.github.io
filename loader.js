@@ -1504,7 +1504,7 @@ TRC.loaderUtils = {
 
                     function addClickEvent(elem, recommendation, rboxObj) {
                         if (isFeatureFlagOn('dynamic-links-add-taboola-click-event', true)) {
-                            elem.onmousedown = itemClicked.bind(null, elem, recommendation, rboxObj);
+                            //elem.onmousedown = itemClicked.bind(null, elem, recommendation, rboxObj);
                         }
                     }
 
