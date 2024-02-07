@@ -806,7 +806,7 @@
       maxLinksPerCard: 3,
       cardSelector: "div.article__content ul li",
       buttonSelector: "a[aria-label*=\"buy here\"]",
-      template: "<div style=\"display:inline\">&nbsp;&nbsp;|&nbsp;&nbsp;<a href=\"{{url}}\" target=\"_blank\" rel=\"nofollow sponsored noreferrer noopener\">Buy on {{merchantName}}</a>"
+      template: "<div style=\"display:inline\"><strong>&nbsp;&nbsp;|&nbsp;&nbsp;<a href=\"{{url}}\" target=\"_blank\" rel=\"nofollow sponsored noreferrer noopener\">Buy on {{merchantName}} for {{currentPrice}}</a></strong>"
     };
     var taboolaWidgetCustomStyles = ".product-card__affiliate-price { min-width: 200px !important; }";
     var WAYPOINT_DOMAIN = "go.skimresources.com"; // After mid-2018, go.skimresources.com should be prefered to go.redirectingat.com. However, since the internet
