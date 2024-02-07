@@ -805,7 +805,7 @@
       mode: "add",
       maxLinksPerCard: 3,
       cardSelector: "div.article__content ul li",
-      buttonSelector: "a[aria-label*=\"buy here\"]",
+      buttonSelector: "a[rel*=\"sponsored\"]",
       template: "<div style=\"display:inline\"><strong>&nbsp;&nbsp;|&nbsp;&nbsp;<a href=\"{{url}}\" target=\"_blank\" rel=\"nofollow sponsored noreferrer noopener\">Buy on {{merchantName}} for {{currentPrice}}</a></strong>"
     };
     var taboolaWidgetCustomStyles = ".product-card__affiliate-price { min-width: 200px !important; }";
