@@ -806,7 +806,7 @@
       maxLinksPerCard: 3,
       cardSelector: "div.wp-block-button-container",
       buttonSelector: "a.affiliate-btn__link",
-      template: "<div class='affiliate-btn standard'><a class=\"affiliate-btn__link\" href=\"{{url}}\" target=\"_blank\" data-rich-text-format-boundary=\"1\" rel=\"noopener sponsored noskim\">From <s style=\"font-weight:200;\">{{originalPrice}}</s>; {{currentPrice}} at {{merchantName}}</a></div>"
+      template: "<div class='affiliate-btn standard'><a class=\"affiliate-btn__link\" href=\"{{url}}\" target=\"_blank\" data-rich-text-format-boundary=\"1\" rel=\"noopener sponsored noskim\">Buy for {{currentPrice}} at {{merchantName}}</a></div>"
     };
     var taboolaWidgetCustomStyles = ".product-card__affiliate-price { min-width: 200px !important; }";
     var WAYPOINT_DOMAIN = "go.skimresources.com"; // After mid-2018, go.skimresources.com should be prefered to go.redirectingat.com. However, since the internet
